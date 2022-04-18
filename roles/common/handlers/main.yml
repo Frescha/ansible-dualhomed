@@ -1,0 +1,11 @@
+---
+# file: roles/common/handlers/main.yml
+- name: Restart chronyd
+  become: true
+  service:
+    name: chronyd
+    state: restarted
+
+- name: Update timezone
+  become: true
+  command: dpkg-reconfigure --frontend noninteractive tzdata

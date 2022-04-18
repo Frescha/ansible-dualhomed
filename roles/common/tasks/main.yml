@@ -1,0 +1,28 @@
+---
+
+- name: make sure chronyd is installed
+  become: true
+  apt:
+    name: chrony
+    state: latest
+    update_cache: yes
+  tags: NTP
+
+- name: deploy chrony.conf template
+  become: true
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+    backup: yes
+  tags: NTP
+
+- name: Set hostname
+  become: true
+  hostname:
+    name: "{{ bootstrap_hostname }}"
+  tags: bootstrap
+
+ 

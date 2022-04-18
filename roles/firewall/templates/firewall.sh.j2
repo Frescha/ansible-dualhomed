@@ -1,0 +1,74 @@
+#!/bin/bash
+# iptables firewall.
+
+# Set the default rules.
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+{% if firewall_flush_rules_and_chains %}
+# Remove all rules and chains.
+iptables -t nat -F
+iptables -t mangle -F
+iptables -F
+iptables -X
+{% endif %}
+
+# Accept traffic from loopback interface (localhost).
+iptables -A INPUT -i lo -j ACCEPT
+
+# ################################
+# Default ruleset
+# ################################
+
+# Allow ALL incoming SSH on eth0
+iptables -A INPUT -i eth0 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+# Allow ALL incoming SSH on eth1
+iptables -A INPUT -i eth1 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth1 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+# ################################
+# Use case section
+# ################################
+
+{% if firewall_usecase_webserver %}
+# Use case - Webserver
+
+## Allow incoming HTTP
+iptables -A INPUT -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+
+## Allow incoming HTTPS
+iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
+{% endif %}
+
+{% if firewall_usecase_smb %}
+# Use case - SMB Fileshare
+{% endif %}
+
+{% if firewall_usecase_rsync %}
+# Use case - RSYNC
+{% endif %}
+
+{% if firewall_usecase_sftp %}
+# Use case - SFTP
+{% endif %}
+
+{% if firewall_usecase_smtp %}
+# Use case - SMTP
+{% endif %}
+
+# ################################
+# !!! Danger Zone !!!
+#
+# !!! Danger Zone !!!
+# ################################
+
+# ################################
+# Drop all other traffic
+# ################################
+
+ip6tables -A INPUT -j DROP

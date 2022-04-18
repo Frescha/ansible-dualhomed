@@ -1,0 +1,12 @@
+---
+- name: Ensure iptables is present.
+  package: name=iptables state=present
+
+- name: Copy firewall script into place.
+  become: true
+  template:
+    src: firewall.sh.j2
+    dest: /etc/firewall.sh
+    owner: root
+    group: root
+    mode: 0744  

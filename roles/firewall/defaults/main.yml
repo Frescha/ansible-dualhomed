@@ -1,0 +1,25 @@
+---
+
+firewall_state: started
+firewall_enabled_at_boot: true
+
+firewall_usecase_webserver: false
+firewall_usecase_smb: false
+firewall_usecase_rsync: false
+firewall_usecase_sftp: false
+firewall_usecase_smtp: false
+
+firewall_flush_rules_and_chains: true
+
+# Set to true to ensure other firewall management software is disabled.
+firewall_disable_firewalld: false
+firewall_disable_ufw: false
+
+# !!! Danger Zone !!!
+firewall_allowed_tcp_ports:
+  - "22"
+  - "25"
+  - "80"
+  - "443"
+firewall_allowed_udp_ports: []
+firewall_log_dropped_packets: true
