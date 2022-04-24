@@ -1,0 +1,23 @@
+---
+
+- name: Add an Apt signing key, uses whichever key is at the URL
+  become: true
+  ansible.builtin.apt_key:
+    url: https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_20.04/Release.key
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04'
+
+- name: Add specified repository into sources list
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_20.04/ /
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '20.04'
+
+- name: Make sure Podman is installed
+  become: true
+  ansible.builtin.apt:
+    name: podman
+    state: latest
+    update_cache: yes
+  tags: edge-compute

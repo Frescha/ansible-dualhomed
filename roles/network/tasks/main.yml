@@ -1,46 +1,24 @@
 ---
 
-- name: Make sure ifupdown is installed
+- name: Install network tools
   become: true
-  apt:
-    name: ifupdown 
+  ansible.builtin.apt:
+    name: "{{ item }}"
     state: latest
-    update_cache: yes
+    update_cache: true
+  loop:
+    - ifupdown
+    - net-tools
   tags: network
 
-- name: Deploy loopback interface template
-  become: true
-  template:
-    src: interfaces.j2
-    dest: /etc/network/interfaces
-    owner: root
-    group: root
-    mode: 0644
-    #backup: yes
-  tags: network
+- import_tasks: hostname.yml
+  tags:
+    - network
 
-- name: Deploy eth0 (northbound interface) template
-  become: true
-  template:
-    src: eth0.j2
-    dest: /etc/network/interfaces.d/eth0
-    owner: root
-    group: root
-    mode: 0644
-    #backup: yes
-  tags: network
+- import_tasks: hosts.yml
+  tags:
+    - network
 
-- name: Deploy eth1 (southbond interface) template
-  become: true
-  template:
-    src: eth1.j2
-    dest: /etc/network/interfaces.d/eth1
-    owner: root
-    group: root
-    mode: 0644
-    #backup: yes
-  tags: network
-
-- name: Deactivation of Netplan. (Executability is removed)
-  become: true
-  file: dest=/usr/lib/systemd/system-generators/netplan mode=a-x
+- import_tasks: interfaces.yml
+  tags:
+    - network

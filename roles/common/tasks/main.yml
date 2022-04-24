@@ -18,11 +18,3 @@
     mode: 0644
     backup: yes
   tags: NTP
-
-- name: Set hostname
-  become: true
-  hostname:
-    name: "{{ bootstrap_hostname }}"
-  tags: bootstrap
-
- 

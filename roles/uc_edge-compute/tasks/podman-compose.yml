@@ -1,0 +1,6 @@
+---
+
+# pip3 install podman-compose
+
+- name: Make sure podman-compose is installed
+  ansible.builtin.command: pip3 install podman-compose

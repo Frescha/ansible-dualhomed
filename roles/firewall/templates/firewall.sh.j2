@@ -45,8 +45,23 @@ iptables -A INPUT -i eth0 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j
 iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 {% endif %}
 
-{% if firewall_usecase_smb %}
+{% if uc_smbv1brdige %}
 # Use case - SMB Fileshare
+# iptables rules just allowing smb traffic between Raspi and legacy SMBv1 server
+# apply only in case you run Raspi and legacy server within same network
+# eth0: Northbound-Interface (eth0)
+# eth1: Southbound-Interface (eth1)
+
+# Allow SMBv1 connection from Southbound-Interface (eth1) to DualHomed-Server
+iptables -A INPUT -i eth1 -p tcp -m multiport --dports 445,137:139 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+# 
+iptables -A INPUT -i eth0 -p tcp -m multiport --dports 445,137:139 -m state --state NEW,ESTABLISHED -j DROP
+
+#iptables -A INPUT -i eth1 -p tcp -s 172.16.1.0/24 --dport 445 -m state --state NEW,ESTABLISHED -j ACCEPT
+#iptables -A OUTPUT -o eth0 -p tcp --sport 445 -m state --state ESTABLISHED -j ACCEPT
+
+
 {% endif %}
 
 {% if firewall_usecase_rsync %}
@@ -63,7 +78,7 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 443 -m state --state ESTABLISHED -j AC
 
 # ################################
 # !!! Danger Zone !!!
-#
+# !!! Danger Zone !!!
 # !!! Danger Zone !!!
 # ################################
 

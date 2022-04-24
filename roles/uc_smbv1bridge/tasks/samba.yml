@@ -1,0 +1,34 @@
+---
+
+- name: Ensure Samba-related packages are installed (Debian).
+  become: true
+  apt:
+    name:
+      - samba
+      - samba-common
+    state: present
+
+- name: Ensure Samba is running and set to start on boot.
+  become: true
+  service:
+    name: smbd
+    state: started
+    enabled: true
+
+- name: Copy SMBv1Brdige configuration file into place.
+  become: true
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0744  
+  tags: smbv1bridge
+
+- name: Restart Samba Service
+  become: true
+  service:
+    name: smbd
+    state: restarted
+    enabled: true
+  tags: smbv1bridge

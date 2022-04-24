@@ -1,0 +1,48 @@
+---
+
+- name: Make sure cifs-utils is installed
+  become: true
+  ansible.builtin.apt:
+    name: cifs-utils
+    state: latest
+    update_cache: yes
+  tags: smbv1bridge
+
+#- name: Place Samba credentials file
+#  become: true
+#  template:
+#    src: .smbcredentials.j2
+#    dest: "/root/.smbcredentials"
+#    owner: "uc_smbv1brdige_os_user"
+#    mode: 0600
+
+- name: Check mountpoint exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ uc_smbv1brdige_mountpoint }}"
+    state: directory
+    mode: '0777'
+    owner: root
+    group: root
+
+- name: Mount network share (SMBv1)
+  become: true
+  mount:
+    src: "{{ uc_smbv1brdige_uri }}"
+    path: "{{ uc_smbv1brdige_mountpoint }}"
+    fstype: cifs
+    opts: 'vers=1.0,file_mode=0777,dir_mode=0777,username={{ uc_smbv1brdige_username }},password={{ uc_smbv1brdige_password }}'
+    state: mounted
+  when: uc_smbv1brdige_mount_smbv1
+  tags: smbv1bridge
+
+- name: Mount network share (SMBv3)
+  become: true
+  mount:
+    src: "{{ uc_smbv1brdige_uri }}"
+    path: "{{ uc_smbv1brdige_mountpoint }}"
+    fstype: cifs
+    opts: 'file_mode=0777,dir_mode=0777,username={{ uc_smbv1brdige_username }},password={{ uc_smbv1brdige_password }}'
+    state: mounted
+  when: not uc_smbv1brdige_mount_smbv1
+  tags: smbv1bridge

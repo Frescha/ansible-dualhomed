@@ -2,7 +2,7 @@
 
 ## Ansible Playbook
 
-Build a dual homed homed using Ansible. The goal is to easily install a dual homed host on the following machines:
+Build a dual homed homed using Ansible. The goal is to easily install a dual (or multi) homed host on the following machines:
 
 - [ ] Ubuntu
 - [ ] Rasbian
@@ -23,6 +23,25 @@ or
 ```bash
 ansible-playbook -i inventory.ini main.yml
 ```
+
+## Use Case SMBv1Brdige
+
+### How to use
+
+/etc/fstab define share
+```bash
+//172.16.0.2/share /reshare cifs uid=reuser,gid=reuser,credentials=/root/cred
+```
+### Test SMBv1 connection
+
+```bash
+smbclient //192.168.64.1/reshare -s ./smb.conf -m NT1 -U reuser 
+```
+
+## Use Case Edge Compute
+
+### How to use
+
 
 ## Troubleshooting
 

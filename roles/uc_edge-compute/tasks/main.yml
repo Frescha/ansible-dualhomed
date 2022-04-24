@@ -1,0 +1,9 @@
+---
+
+- import_tasks: podman.yml
+  tags:
+    - edge-compute
+
+- import_tasks: podman-compose.yml
+  tags:
+    - edge-compute

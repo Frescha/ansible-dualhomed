@@ -1,8 +1,29 @@
 ---
-# file: host_vars/db-bos-1.example.com
-foo_agent_port: 86
-bar_agent_port: 99
 
 # System bootstrap
-bootstrap_hostname: poc
 timezone: 'Europe/Berlin'
+
+# Network bootstrap
+network_eth1_net: "172.168.1.1/24"
+network_eth1_ip: "172.16.1.2"
+network_eth1_snm: "255.255.255.0"
+network_eth1_gw: "172.168.1.1"
+
+
+# Use Case: SMBv1Brdige
+uc_smbv1brdige: true
+
+uc_smbv1brdige_uri: "//192.168.12.10/Backup"
+uc_smbv1brdige_username: "share"
+uc_smbv1brdige_password: ""
+uc_smbv1brdige_domain: "WORKGROUP"
+uc_smbv1brdige_mountpoint: "/opt/reshare"
+uc_smbv1brdige_mount_smbv1: false
+
+uc_smbv1brdige_os_user: "reuser"
+uc_smbv1brdige_os_user_pw: ""
+uc_smbv1brdige_os_group: "reuser"
+uc_smbv1brdige_os_dir_home: "/opt/reshare"
+
+# Use Case: Edge Compute
+uc_edgecompute: true

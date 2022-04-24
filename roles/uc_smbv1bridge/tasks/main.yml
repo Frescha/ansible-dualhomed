@@ -1,0 +1,13 @@
+---
+
+- import_tasks: user.yml
+  tags:
+    - smbv1bridge
+
+- import_tasks: mount_cifs.yml
+  tags:
+    - smbv1bridge
+
+- import_tasks: samba.yml
+  tags:
+    - smbv1bridge

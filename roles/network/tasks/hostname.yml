@@ -1,0 +1,12 @@
+---
+
+- name: "Debug: FDQN"
+  debug:
+    msg: "{{ansible_hostname}}"
+
+- name: Set hostname to inventory hostname
+  become: true
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+  when:
+    - ansible_hostname != inventory_hostname

@@ -1,0 +1,13 @@
+[global]
+  workgroup = SMBONE
+  client min protocol = NT1
+  server min protocol = NT1
+  ntlm auth = ntlmv1-permitted
+  interfaces = eth1
+[reshare]
+  path = /opt/reshare
+  root preexec = mount /opt/reshare
+  writeable = yes
+  force user = reuser
+  force group = reuser
+  veto files = .ssh
