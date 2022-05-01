@@ -1,6 +1,6 @@
 ---
 
-- hosts: dual_homed
+- hosts: all
   vars_files:
     - host_vars/config.yml
 
