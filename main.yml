@@ -5,12 +5,24 @@
     - host_vars/config.yml
 
   pre_tasks:
+    - name: Print the gateway for each host when defined
+      ansible.builtin.debug:
+        msg: Deploying on Host {{ ansible_host }} with IP {{ ip }} and gateway {{ ansible_default_ipv4.gateway }}
+
     - name: Ensure apt cache is up to date.
       become: true
       ansible.builtin.apt:
         upgrade: yes
         update_cache: true
         cache_valid_time: 3600
+      when:
+        - ansible_facts.os_family == "Debian"
+
+    - name: Upgrade all apt packages
+      become: true
+      ansible.builtin.apt:
+        upgrade: yes
+        force_apt_get: yes
       when:
         - ansible_facts.os_family == "Debian"
 
@@ -22,5 +34,5 @@
         update_cache: yes
   roles:
     - common
-    - network
-    - firewall
+    # - network
+    # - firewall
